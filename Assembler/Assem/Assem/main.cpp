@@ -12,93 +12,97 @@ list<InstructionStruct> codes;
 
 int main()
 {
-	//직접 입력 받아서 함
 	string fileName;
 	cin >> fileName;
 	ifstream is(fileName);
 
 	if (is.is_open())
-	{//파일 존재하는지 확인
+	{//file exist
 		while (!is.eof())
 		{//스트림의 끝에 도달할때 까지 줄마다 받아옴
 			string line;
 			getline(is, line);
 			string* temp = parseCode(line);//parseCode 는 아래함수
-			//3개의 문장 ㅇㅅㅇ 배열로 나올꺼임
-
+			//3개의 문장 배열로 나올꺼임
 			makeCodeList(temp);
 			//코드리스트에 넣음
-
 			cout << line << endl;
+			//10주차 : 만약 end면 루프 나감
+			if (codes.rbegin()->opcode == "end")break;
 		}
+		
+		//Init
 		InstructionStruct::initSizeInst();
-		list<InstructionStruct>::iterator iter;
-		for (iter = codes.begin(); iter != codes.end(); iter++)
-		{
-			iter->calAddress();
-			cout << *iter << ' ' << endl;
+		//10주차 : InitOptable 을 호출하여 opTable을 초기화한다.
+		InstructionStruct::initOptable();
+
+		for (auto itr : codes)
+		{//10주차 : convertOpcode를 통해서 hex_opcode에 값을 넣어준다.
+			itr.calAddress();
+			itr.convertOpcode();
+			cout << itr << ' ' << endl;
 		}
-	    
-		/*
-		for (auto const& x : codes)
-		{
-			std::cout <<hex<< x.first  // string (key)
-				<< ':'
-				<< x.second // string's value 
-				<< std::endl;
-		}
-		*/
+
 	}
 	else
-	{//없으면 메세지
 		cout << "file does not exist"<<endl;
-	}
 }
+
+
 
 static string* parseCode(string line)
 {
 	string* words = new string[3];
-	if (line.find(" ") == 0)
-	{//맨처음이 공백이면 Label이 없는거임 
+	////10주차 : 만약 주석이면? 그냥 line다넣음
+	if (line.find(".") == 0)
+		words[0] = line;
+	
+	////  Label이 없을  때
+	else if (line.find(" ") == 0)
+	{
 		words[0] = "";
 		//그래서 첫번쨰 배열을 공백으로 줌
-
 		line = line.substr(9, line.size() - 9);
 		//10번째 부터 잘라냄 (Operator 가 10번째 줄부터 시작하니까
+
+		//피연산자(operand)가 있을경우
 		if (line.find(" ") != string::npos)
-		{//그리고 만약 명령어가 있을 피연산자가 있을경우
+		{
 			words[1] = line.substr(0, line.find(" "));
-			//공백 찾을때 까지 ㅇㅇ, 글고 저기 미만이라고 생각하면됨 
 			//0~ 공백 이전까지가 들어감
 			//그래서 뒤에 index 생각해서 line.find(" ")+1 하면 안댐
 			line = line.substr(8, line.size());
-			//똑같이 자름
+			// 10주차 : 뒤에 공백 자르고 넣음
+			line = line.substr(0, line.find(" "));
 			words[2] = line;
-			//넣음
-
-		}
+		}		
 		else
-		{//없을 경우 ex) rsub
+		{//operand가 없을 경우 ex) rsub
 			words[1] = line;
 			words[2] = "";
 		}
 
 		return words;
 	}
+	//Label 있을 떄
 	else
-	{
+	{	//Label 넣음
 		words[0] = line.substr(0, line.find(" "));
-		//다음 공백까지 잘라주고
-		//first     ldx      index
-		//word[0]에 first가 들어가는거임
-
 		line = line.substr(9, line.size() - 9);
-		//ldx      index
-		//아 뒤에 저게 사이즈네
 		if (line.find(" ") != string::npos)
-		{//위랑 같음
+		{//피연산자 있을경우
 			words[1] = line.substr(0, line.find(" "));
 			line = line.substr(8, line.size());
+
+			// 10주차 : 피연산자의 첫번째 문자가 c나 x 일때 , 따로 처리해준다.
+			if (line[0] == 'c' || line[0] == 'x')
+			{
+				line = line.substr(0, line.find_last_of('\'') + 1);// 
+			}// 그냥 
+			else
+				line = line.substr(0, line.find(" "));
+
+
 			words[2] = line;
 		}
 		else

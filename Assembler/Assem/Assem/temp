@@ -1,14 +1,17 @@
 test     start   1000
 first    ldx     index
          jsub    strcmp
-         jsub    strcpy
+         jsub    strcpy    
 strcmp   lda     index
          rsub
 strcpy   lda     incr
-         rsub
-count    word    11
-str1     byte    c'string data'
+         rsub        
+count    word    11      
+str1     byte    c'string data'  
 str2     byte    c'string data'
-index    word    0
+index    word    0  
 incr     word    1
          end     first
+
+
+
