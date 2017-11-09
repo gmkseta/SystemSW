@@ -8,6 +8,8 @@ int InstructionStruct::startAddress = 0;
 string InstructionStruct::sourceName = "0";
 list<string> InstructionStruct::sizeInst = {};
 list<InstructionStruct::SIC_OPTAB> InstructionStruct::sic_optable = {};
+map<string, int> InstructionStruct::symbolTable = {};
+
 
 InstructionStruct::InstructionStruct(string* words)
 {
@@ -19,28 +21,24 @@ InstructionStruct::InstructionStruct(string* words)
 
 void InstructionStruct::calAddress()
 {
-
-	if (this->label[0] == '.')//pr
+	// 10주차 : 주석일때는 따로 주소 처리를 하지않고 넘어간다.
+	if (this->label[0] == '.')
 		return;
-
-	//lda index ~ 이런거 한 명령어가 3byte 라서 ㅇㅅㅇ
-
 	if (this->opcode == "start")
 	{
 		InstructionStruct::sourceName = this->label;
-		//start의 label이 소스코드의 이름임
+		//start의 label이 소스코드의 이름
 	    InstructionStruct::startAddress = stoi(this->operand, 0, 16);
 		//이게 문자열로 들어왔으니까 16진수로 변환
 		InstructionStruct::currentAddress = InstructionStruct::startAddress;
 	}
 	else if (find(begin(sizeInst), end(sizeInst), this->opcode) == end(sizeInst))
-	{//find 는 ㅇㅇ sizeInst 라는 리스트에서 이 멤버들이 this->opcode와 같나 확인하는거임 
-		//lda ldx 같은 일반적인 명령어를 여기서 처리
+	{	//lda ldx 같은 일반적인 명령어를 여기서 처리
 		this->address = this->currentAddress;
 		this->currentAddress += 0x3;
 	}
 	else
-	{
+	{	//res
 		if (this->opcode == "resb")
 		{
 			this->address = this->currentAddress;
@@ -129,12 +127,28 @@ std::ostream& operator<<(std::ostream &strm, const InstructionStruct &a) {
 	if (a.label[0] == '.')
 		return strm << "주석:" << a.label << endl;//pr
 	else if(a.hex_opcode==-1)
-		return strm << "label=" << a.label << "끝" << endl << "opcode=" << a.opcode << "끝" << endl << "operand=" << a.operand << "끝" << endl << "address=" << hex << a.address << "끝" << endl;
-		//return strm << "label=" << a.label << endl << "opcode=" << a.opcode << endl << "operand=" << a.operand << endl << "address=" << hex << a.address << endl ;
+		return strm << "label=" << a.label << endl << "opcode=" << a.opcode << endl << "operand=" << a.operand << endl << "address=" << hex << a.address << endl ;
 	else
-		return strm << "label=" << a.label << "끝" << endl << "opcode=" << a.opcode << "끝" << endl << "operand=" << a.operand << "끝" << endl << "address=" << hex << a.address << "끝" << endl;
-		//return strm << "label=" << a.label << endl << "opcode=" << a.opcode << endl << "operand=" << a.operand << endl << "address=" << hex << a.address << endl << "HexOpcode="  << a.hex_opcode << endl;
+		return strm << "label=" << a.label << endl << "opcode=" << a.opcode << endl << "operand=" << a.operand << endl << "address=" << hex << a.address << endl << "HexOpcode="  << a.hex_opcode << endl;
 }
+
+
+
+//11주 실습
+void InstructionStruct::makeSymbolTable()
+{
+	if (this->label.compare("") != 0)
+	{
+		if (!InstructionStruct::symbolTable.count(this->label))
+		{
+			InstructionStruct::symbolTable.insert(pair<string, int>(this->label, this->address));
+		}
+	}
+}
+//void Instruction
+//this0 > label.compare("") != 0
+//if(count ?)
+//insert 해당하는 label , ~
 
 
 

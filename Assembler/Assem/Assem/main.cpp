@@ -96,17 +96,15 @@ static string* parseCode(string line)
 
 			// 10주차 : 피연산자의 첫번째 문자가 c나 x 일때 , 따로 처리해준다.
 			if (line[0] == 'c' || line[0] == 'x')
-			{
-				line = line.substr(0, line.find_last_of('\'') + 1);// 
-			}// 그냥 
+			{//' 가 마지막으로 있는 곳 까지 짜룸. (find_last_of)
+				line = line.substr(0, line.find_last_of('\'') + 1);
+			}//특별한 점이 없으면 공백 있는곳까지 자름
 			else
 				line = line.substr(0, line.find(" "));
-
-
 			words[2] = line;
 		}
 		else
-		{
+		{//피연산자가 없을 경우
 			words[1] = line;
 			words[2] = "";
 		}
@@ -120,14 +118,3 @@ void makeCodeList(string* words)
 	InstructionStruct newLine(words);
 	codes.push_back(newLine);
 }
-
-/*
-void insertCode(string* words)
-{
-	InstructionStruct newLine(words);
-	if (words[1] != "start")
-	{
-		codes.insert(pair<int, InstructionStruct>(newLine.address, newLine));
-	}
-}
-*/

@@ -24,13 +24,12 @@ public:
 	void calAddress();
 	static void initSizeInst();
 	static void initOptable();
-
-	void makeSymbolTable();
-
 	void convertOpcode();
+
+
 	void convertHexToStr();
 	void convertCharToHex();
-
+	void makeSymbolTable();
 
 
 
