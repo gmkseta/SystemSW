@@ -19,9 +19,7 @@ int main()
 			string line;
 			getline(is, line);
 			string* temp = parseCode(line);//parseCode 로 라인을 부분부분 나눔
-			//3개의 문장 배열로 나올꺼임
-			makeCodeList(temp);
-			//코드리스트에 넣음
+			makeCodeList(temp);//코드리스트에 넣음
 			cout << line << endl;
 			//10주차 : 만약 end면 루프 나감
 			if (codes.rbegin()->opcode == "end")break;
@@ -37,8 +35,7 @@ int main()
 			cout << itr << ' ' << endl;
 		}
 	}
-	else
-		cout << "file does not exist"<<endl;
+	else { cout << "file does not exist" << endl; }
 }
 static string* parseCode(string line)
 {
@@ -78,7 +75,7 @@ static string* parseCode(string line)
 			words[1] = line.substr(0, line.find(" "));
 			line = line.substr(8, line.size());
 			// 10주차 : 피연산자의 첫번째 문자가 c나 x 일때 , 따로 처리해준다.
-			if (line[0] == 'c' || line[0] == 'x')
+			if (line[0] == 'c' || line[0] == 'x' || line[0] == 'C' || line[0] == 'X')
 			{//' 가 마지막으로 있는 곳 까지 짜룸. (find_last_of)
 				line = line.substr(0, line.find_last_of("'") + 1);
 			}
