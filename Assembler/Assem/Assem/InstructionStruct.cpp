@@ -21,7 +21,7 @@ InstructionStruct::InstructionStruct(string* words)
 
 void InstructionStruct::calAddress()
 {
-	// 10주차 : 주석일때는 따로 주소 처리를 하지않고 넘어간다.
+	// 10주차 :주석일떄 주소 처리를 하지않음
 	if (this->label[0] == '.')
 		return;
 	if (this->opcode == "start")
@@ -29,11 +29,11 @@ void InstructionStruct::calAddress()
 		InstructionStruct::sourceName = this->label;
 		//start의 label이 소스코드의 이름
 	    InstructionStruct::startAddress = stoi(this->operand, 0, 16);
-		//이게 문자열로 들어왔으니까 16진수로 변환
+		//문자열을 16진수로 변환
 		InstructionStruct::currentAddress = InstructionStruct::startAddress;
 	}
 	else if (find(begin(sizeInst), end(sizeInst), this->opcode) == end(sizeInst))
-	{	//lda ldx 같은 일반적인 명령어를 여기서 처리
+	{	//lda ldx 같은 일반적인 명령어 처리
 		this->address = this->currentAddress;
 		this->currentAddress += 0x3;
 	}
@@ -44,22 +44,21 @@ void InstructionStruct::calAddress()
 			this->address = this->currentAddress;
 			this->currentAddress += 0x1 * stoi(this->operand);
 			//1byte * 뒤에있는 숫자만큼
-			
 		}
 		else if (this->opcode == "resw")
 		{
 			this->address = this->currentAddress;
 			this->currentAddress += 0x3 * stoi(this->operand);
+			//3byte * 
 		}
 		else if (this->opcode == "word")
 		{
 			this->address = this->currentAddress;
 			this->currentAddress += 0x3;
-			//워드는 ㅇㅇ 그냥 3만
+			//워드는 3
 		}
-		else//this->opcode =="byte"임
-		{//근데 사실 이건 str1 byte c'sdafas' 이런식으로 들어갈 수 도있자나..
-
+		else//this->opcode =="byte"
+		{
 			this->address = this->currentAddress;
 			this->currentAddress += this->operand.substr(
 				this->operand.find("'"),//첫번쨰 ' 부터
@@ -76,7 +75,7 @@ void InstructionStruct::initSizeInst()
 	InstructionStruct::sizeInst.push_back("byte");
 }
 
-
+// 10주차 : Optab 초기화 해주는 함수
 void InstructionStruct::initOptable()
 {
 	InstructionStruct::sic_optable.push_back({ "ADD"	,3		,0X18 });
@@ -123,16 +122,17 @@ void InstructionStruct::convertOpcode()
 void InstructionStruct::convertHexToStr()
 {
 }
+
+
 std::ostream& operator<<(std::ostream &strm, const InstructionStruct &a) {
+	// 10주차 : 
 	if (a.label[0] == '.')
-		return strm << "주석:" << a.label << endl;//pr
+		return strm << "주석:" << a.label << endl;
 	else if(a.hex_opcode==-1)
 		return strm << "label=" << a.label << endl << "opcode=" << a.opcode << endl << "operand=" << a.operand << endl << "address=" << hex << a.address << endl ;
 	else
 		return strm << "label=" << a.label << endl << "opcode=" << a.opcode << endl << "operand=" << a.operand << endl << "address=" << hex << a.address << endl << "HexOpcode="  << a.hex_opcode << endl;
 }
-
-
 
 //11주 실습
 void InstructionStruct::makeSymbolTable()
@@ -149,11 +149,6 @@ void InstructionStruct::makeSymbolTable()
 //this0 > label.compare("") != 0
 //if(count ?)
 //insert 해당하는 label , ~
-
-
-
-
-
 InstructionStruct::~InstructionStruct()
 {
 }

@@ -47,7 +47,6 @@ public:
 
 	static string sourceName;
 	static list<string> sizeInst;
-	//사이즈 명령어들을 저장하고있는 리스트?
 	static list<SIC_OPTAB> sic_optable;
 	static map<string, int> symbolTable;
 
