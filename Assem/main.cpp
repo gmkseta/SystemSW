@@ -2,10 +2,10 @@
 #include <fstream>
 #include <algorithm>
 #include "InstructionStruct.h"
+#include <iomanip>
 using namespace std;
 static string* parseCode(string line);
 static void makeCodeList(string* words);
-//map<int, InstructionStruct> codes;
 list<InstructionStruct> codes;
 int main()
 {
@@ -22,21 +22,47 @@ int main()
 			makeCodeList(temp);//코드리스트에 넣음
 			cout << line << endl;
 			//10주차 : 만약 end면 루프 나감
-			if (codes.rbegin()->opcode == "end")break;
+		if (codes.rbegin()->opcode == "end")break;
 		}
 		//Init
 		InstructionStruct::initSizeInst();
-		//10주차 : InitOptable 을 호출하여 opTable을 초기화한다.
 		InstructionStruct::initOptable();
-		for (auto itr : codes)
+
+		list<InstructionStruct>::iterator iter;
+		for (iter=codes.begin();iter!=codes.end();iter++)//auto *itr : codes)
 		{//10주차 : convertOpcode를 통해서 hex_opcode에 값을 넣어준다.
-			itr.calAddress();
-			itr.convertOpcode();
-			cout << itr << ' ' << endl;
+			iter->calAddress();
+			iter->convertOpcode();
+			iter->makeSymbolTable();
+			cout << *iter << ' ' << endl;
+		}
+		//12주차 SymbolTable 출력하기
+		cout << "┏━━━Symbol┳Table━━━━┓" << endl;
+		cout << "┃    Label   ┃  Address    ┃" << endl;
+		cout << "┣━━━━━━ ━━━━━━━┫" << endl;
+		for (auto itr : InstructionStruct::symbolTable)
+		{
+			cout << "┃  " << setw(8)<<itr.first;//label
+			cout<< setw(17)<<itr.second <<"┃"<< endl;//
+		}
+		cout << "┗━━━━━━ ━━━━━━━┛" << endl;
+		
+		for (auto itr : codes)
+		{
+			cout.flags(ios::left);
+			cout<<setw(10) << itr.label <<setw(10) << itr.opcode << setw(20) << itr.operand <<"   ";
+			itr.printHexOperand();
+			cout << endl;
+
 		}
 	}
 	else { cout << "file does not exist" << endl; }
 }
+//12주차  - hexOpcode: 00
+//          hex_operand: 101e
+//이런식으로 찍어줄꺼임
+
+
 static string* parseCode(string line)
 {
 	string* words = new string[3];
@@ -94,5 +120,5 @@ static string* parseCode(string line)
 void makeCodeList(string* words)
 {
 	InstructionStruct newLine(words);
-	codes.push_back(newLine);
+	codes.push_back(newLine);// push_back(newLine);
 }

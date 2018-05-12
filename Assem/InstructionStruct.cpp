@@ -20,6 +20,7 @@ void InstructionStruct::calAddress()
 		InstructionStruct::sourceName = this->label;//start의 label이 소스코드의 이름
 	    InstructionStruct::startAddress = stoi(this->operand, 0, 16);//문자열을 16진수로 변환
 		InstructionStruct::currentAddress = InstructionStruct::startAddress;
+		this->address = this->currentAddress;
 	}
 	else if (find(begin(sizeInst), end(sizeInst), this->opcode) == end(sizeInst))
 	{	//lda ldx 같은 일반적인 명령어 처리
@@ -64,46 +65,47 @@ void InstructionStruct::initSizeInst()
 // 10주차 : Optab 초기화 해주는 함수
 void InstructionStruct::initOptable()
 {
-	InstructionStruct::sic_optable.push_back({ "ADD"	,3		,0X18 });
-	InstructionStruct::sic_optable.push_back({ "AND"	,3		,0X40 });
-	InstructionStruct::sic_optable.push_back({ "COMP"	,3		,0X28 });
-	InstructionStruct::sic_optable.push_back({ "DIV "   ,3		,0X24 });
-	InstructionStruct::sic_optable.push_back({ "J"      ,3		,0X3C });
-	InstructionStruct::sic_optable.push_back({ "JEQ"    ,3		,0X30 });
-	InstructionStruct::sic_optable.push_back({ "JGT"    ,3		,0X34 });
-	InstructionStruct::sic_optable.push_back({ "JLT"    ,3		,0X38 });
-	InstructionStruct::sic_optable.push_back({ "JSUB"   ,3		,0X48 });
-	InstructionStruct::sic_optable.push_back({ "LDA"    ,3		,0X00 });
-	InstructionStruct::sic_optable.push_back({ "LDCH"   ,3		,0X50 });
-	InstructionStruct::sic_optable.push_back({ "LDL"    ,3		,0X08 });
-	InstructionStruct::sic_optable.push_back({ "LDX"    ,3		,0X04 });
-	InstructionStruct::sic_optable.push_back({ "MUL "   ,3		,0X20 });
-	InstructionStruct::sic_optable.push_back({ "OR"		,3		,0X44 });
-	InstructionStruct::sic_optable.push_back({ "RD"	    ,3		,0XD8 });
-	InstructionStruct::sic_optable.push_back({ "RSUB"   ,3		,0X4C });
-	InstructionStruct::sic_optable.push_back({ "STA"    ,3		,0X0C });
-	InstructionStruct::sic_optable.push_back({ "STCH"   ,3		,0X54 });
-	InstructionStruct::sic_optable.push_back({ "STL"    ,3		,0X14 });
-	InstructionStruct::sic_optable.push_back({ "STSW"   ,3		,0XE8 });
-	InstructionStruct::sic_optable.push_back({ "STX"    ,3		,0X10 });
-	InstructionStruct::sic_optable.push_back({ "SUB"    ,3		,0X1C });
-	InstructionStruct::sic_optable.push_back({ "TD"     ,3		,0XE0 });
-	InstructionStruct::sic_optable.push_back({ "TIX"    ,3		,0X2C });
-	InstructionStruct::sic_optable.push_back({ "WD"     ,3		,0XDC });	
+	InstructionStruct::sic_optable.push_back({ "add"	,3		,0X18 });
+	InstructionStruct::sic_optable.push_back({ "and"	,3		,0X40 });
+	InstructionStruct::sic_optable.push_back({ "comp"	,3		,0X28 });
+	InstructionStruct::sic_optable.push_back({ "div"   ,3		,0X24 });
+	InstructionStruct::sic_optable.push_back({ "j"      ,3		,0X3C });
+	InstructionStruct::sic_optable.push_back({ "jeq"    ,3		,0X30 });
+	InstructionStruct::sic_optable.push_back({ "jgt"    ,3		,0X34 });
+	InstructionStruct::sic_optable.push_back({ "jlt"    ,3		,0X38 });
+	InstructionStruct::sic_optable.push_back({ "jsub"   ,3		,0X48 });
+	InstructionStruct::sic_optable.push_back({ "lda"    ,3		,0X00 });
+	InstructionStruct::sic_optable.push_back({ "ldch"   ,3		,0X50 });
+	InstructionStruct::sic_optable.push_back({ "ldl"    ,3		,0X08 });
+	InstructionStruct::sic_optable.push_back({ "ldx"    ,3		,0X04 });
+	InstructionStruct::sic_optable.push_back({ "mul"   ,3		,0X20 });
+	InstructionStruct::sic_optable.push_back({ "op"		,3		,0X44 });
+	InstructionStruct::sic_optable.push_back({ "rd"	    ,3		,0XD8 });
+	InstructionStruct::sic_optable.push_back({ "rsub"   ,3		,0X4C });
+	InstructionStruct::sic_optable.push_back({ "sta"    ,3		,0X0C });
+	InstructionStruct::sic_optable.push_back({ "stch"   ,3		,0X54 });
+	InstructionStruct::sic_optable.push_back({ "stl"    ,3		,0X14 });
+	InstructionStruct::sic_optable.push_back({ "stsw"   ,3		,0XE8 });
+	InstructionStruct::sic_optable.push_back({ "stx"    ,3		,0X10 });
+	InstructionStruct::sic_optable.push_back({ "sub"    ,3		,0X1C });
+	InstructionStruct::sic_optable.push_back({ "td"     ,3		,0XE0 });
+	InstructionStruct::sic_optable.push_back({ "tix"    ,3		,0X2C });
+	InstructionStruct::sic_optable.push_back({ "wd"     ,3		,0XDC });	
 }
 void InstructionStruct::convertOpcode()
 {
-	transform(this->opcode.begin(), this->opcode.end(), this->opcode.begin(), toupper);    // s를 대문자로 변경
 	for (auto itr : sic_optable) {
-		if (this->opcode == itr.Mnemonic)
+		if (itr.Mnemonic.compare(this->opcode)==0)
 		{
-			hex_opcode = itr.MachineCode;
+			this->hex_opcode = itr.MachineCode;
+			this->instruction_format = itr.Format;
 			break;
 		}
 		else
 			hex_opcode = -1;
 	}
 }
+
 
 std::ostream& operator<<(std::ostream &strm, const InstructionStruct &a) {
 	// 10주차 : 
@@ -128,10 +130,21 @@ void InstructionStruct::makeSymbolTable()
 		}
 	}
 }
-//void Instruction
-//this0 > label.compare("") != 0
-//if(count ?)
-//insert 해당하는 label , ~
+int InstructionStruct::convertHexOperand()
+{
+	if (symbolTable.find(this->operand) == symbolTable.end())
+		return -1;
+	else
+		return symbolTable[this->operand];
+}
+void InstructionStruct::printHexOperand()
+{
+	if (convertHexOperand() != -1)
+		cout << hex << "hex_opcode:" << this->hex_opcode<<"     hex_operand:" << hex << convertHexOperand() << endl;
+	else
+		cout << "label address : " <<hex<<this->address<< endl;
+}
 InstructionStruct::~InstructionStruct()
 {
 }
+
