@@ -8,7 +8,8 @@ std::string InstructionStruct::sourceName = "0";
 std::list<std::string> InstructionStruct::sizeInst = {};
 std::list<InstructionStruct::SIC_OPTAB> InstructionStruct::sic_optable = {};
 std::map<std::string, int> InstructionStruct::symbolTable = {};
-InstructionStruct::InstructionStruct(std::string* words)//持失切
+
+InstructionStruct::InstructionStruct(std::string* words)//持失切'
 {	this->label = words[0];	this->opcode = words[1];this->operand = words[2];}
 
 void InstructionStruct::calAddress()

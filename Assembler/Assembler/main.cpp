@@ -1,6 +1,9 @@
 #include "InstructionStruct.h"
 #include <iostream>
 #include <fstream>
+#include <algorithm>
+
+
 using namespace std;
 static string* parseCode(string line);
 static void makeCodeList(string* word);
@@ -17,15 +20,19 @@ int main()
 		{
 			string line;
 			getline(is, line);
+			transform(line.begin(), line.end(), line.begin(), ::toupper);//대문자로 만들기
+			
 			string* temp = parseCode(line);//ParseCode로 라인을 부분부분 나눔
 			makeCodeList(temp);//코드 리스트에 넣음
 			cout << line << endl;
-			if (codes.rbegin()->opcode == "end") break;
+			if (codes.rbegin()->opcode == "END") break;
 		}
 
 
 	}
 	else cout << "file does not exist" << endl;
+
+	return 0;
 
 }
 
