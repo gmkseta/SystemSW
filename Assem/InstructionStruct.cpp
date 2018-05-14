@@ -1,16 +1,16 @@
 #include "InstructionStruct.h"
 #include <iostream>
-#include <string>
 #include <cctype>
 #include <algorithm>
 int InstructionStruct::currentAddress = 0;
 int InstructionStruct::startAddress = 0;
-string InstructionStruct::sourceName = "0";
-list<string> InstructionStruct::sizeInst = {};
-list<InstructionStruct::SIC_OPTAB> InstructionStruct::sic_optable = {};
-map<string, int> InstructionStruct::symbolTable = {};
-InstructionStruct::InstructionStruct(string* words)//积己磊
+std::string InstructionStruct::sourceName = "0";
+std::list<std::string> InstructionStruct::sizeInst = {};
+std::list<InstructionStruct::SIC_OPTAB> InstructionStruct::sic_optable = {};
+std::map<std::string, int> InstructionStruct::symbolTable = {};
+InstructionStruct::InstructionStruct(std::string* words)//积己磊
 {	this->label = words[0];	this->opcode = words[1];this->operand = words[2];}
+
 void InstructionStruct::calAddress()
 {
 	// 10林瞒 :林籍老嫐 林家 贸府甫 窍瘤臼澜  
@@ -109,6 +109,7 @@ void InstructionStruct::convertOpcode()
 
 std::ostream& operator<<(std::ostream &strm, const InstructionStruct &a) {
 	// 10林瞒 : 
+	using namespace std;
 	if (a.label[0] == '.')
 		return strm << "林籍:" << a.label.substr(1, a.label.size()) << endl;
 	else if(a.hex_opcode==-1)
@@ -122,6 +123,7 @@ std::ostream& operator<<(std::ostream &strm, const InstructionStruct &a) {
 //11林 角嚼
 void InstructionStruct::makeSymbolTable()
 {
+	using namespace std;
 	if (this->label.compare("") != 0)
 	{
 		if (!InstructionStruct::symbolTable.count(this->label))
@@ -139,6 +141,7 @@ int InstructionStruct::convertHexOperand()
 }
 void InstructionStruct::printHexOperand()
 {
+	using namespace std;
 	if (convertHexOperand() != -1)
 		cout << hex << "hex_opcode:" << this->hex_opcode<<"     hex_operand:" << hex << convertHexOperand() << endl;
 	else

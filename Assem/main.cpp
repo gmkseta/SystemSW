@@ -3,12 +3,13 @@
 #include <algorithm>
 #include "InstructionStruct.h"
 #include <iomanip>
-using namespace std;
-static string* parseCode(string line);
-static void makeCodeList(string* words);
-list<InstructionStruct> codes;
+
+static std::string* parseCode(std::string line);
+static void makeCodeList(std::string* words);
+std::list<InstructionStruct> codes;
 int main()
 {
+	using namespace std;
 	string fileName;
 	cin >> fileName;
 	ifstream is(fileName);
@@ -63,8 +64,11 @@ int main()
 //이런식으로 찍어줄꺼임
 
 
-static string* parseCode(string line)
+static std::string* parseCode(std::string line)
 {
+	
+	using namespace std;
+	
 	string* words = new string[3];
 	if (line.find(".") == 0)
 		words[0] = line;////10주차 : 만약 주석이면 line다넣음
@@ -75,7 +79,7 @@ static string* parseCode(string line)
 		line = line.substr(9, line.size() - 9);
 		//10번째 부터 잘라냄 (Operator 가 10번째 줄부터 시작하니까
 		//피연산자(operand)가 있을경우
-		if (line.find(" ") != string::npos)
+		if (line.find(" ") !=string::npos )
 		{
 			words[1] = line.substr(0, line.find(" "));
 			//0~ 공백 이전까지가 들어감
@@ -96,7 +100,7 @@ static string* parseCode(string line)
 	{	//Label 넣음
 		words[0] = line.substr(0, line.find(" "));
 		line = line.substr(9, line.size() - 9);
-		if (line.find(" ") != string::npos)
+		if (line.find(" ") != std::string::npos)
 		{//피연산자 있을경우
 			words[1] = line.substr(0, line.find(" "));
 			line = line.substr(8, line.size());
@@ -117,7 +121,7 @@ static string* parseCode(string line)
 	}
 	return words;
 }
-void makeCodeList(string* words)
+void makeCodeList(std::string* words)
 {
 	InstructionStruct newLine(words);
 	codes.push_back(newLine);// push_back(newLine);

@@ -1,33 +1,33 @@
 #pragma once
-#include <string>
 #include <list>
 #include <map>
-using namespace std;
+#include <string>
+
 class InstructionStruct
 {
 public:
 	typedef struct OperationCodeTable
 	{//Optable의 구조체
-		string Mnemonic;
+		std::string Mnemonic;
 		int Format;
 		unsigned short int MachineCode;
 	}SIC_OPTAB;
-	InstructionStruct(string* words);
+	InstructionStruct(std::string* words);
 	//생성자인데 word를 매개변수로 넣으면 0,1,2 인덱스의 것을이
 	//각각 label opcode oprand로 들어감
-	string label;//레이블
-	string opcode;
-	string operand;
+	std::string label;//레이블
+	std::string opcode;
+	std::string operand;
 	int instruction_format;
 	int address;//주소값 저장
 	static int startAddress;//시작 address
 	static int currentAddress;
-	static string sourceName;//파일이름
+	static std::string sourceName;//파일이름
 	void calAddress();//opcode에 따라 각각 주소 배정해줌
 	unsigned short int hex_opcode;//16진수의 opcode를 저장할곳
 	//OPTAB 관련 static 함수 , 리스트
-	static list<string> sizeInst;
-	static list<SIC_OPTAB> sic_optable;
+	static std::list<std::string> sizeInst;
+	static std::list<SIC_OPTAB> sic_optable;
 	static void initSizeInst();//resw resb등의 size init함
 	static void initOptable();//optable을 init함
 	int convertHexOperand(); //hex_opcode 넣어주기위함
@@ -36,7 +36,7 @@ public:
 	void convertOpcode();//문자열에 따라 16진수 명령어 코드로 변환하여 저장
 	void convertHexToStr();//16진수를 Str으로
 	void convertCharToHex();//Str을 16진수로
-	static map<string, int> symbolTable;	
+	static std::map<std::string, int> symbolTable;
 
 	void printHexOperand();
 
