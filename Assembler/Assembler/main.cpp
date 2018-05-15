@@ -11,6 +11,10 @@ list<InstructionStruct> codes;
 
 int main()
 {
+
+	InstructionStruct::initSizeInst();
+	InstructionStruct::initOptable();
+
 	string fileName;
 	cin >> fileName;
 	ifstream is(fileName);
@@ -24,16 +28,21 @@ int main()
 			
 			string* temp = parseCode(line);//ParseCode로 라인을 부분부분 나눔
 			makeCodeList(temp);//코드 리스트에 넣음
+			codes.back().calAddress();
+			codes.back().convertOpcode();
+			codes.back().makeSymbolTable();
 			cout << line << endl;
-			if (codes.rbegin()->opcode == "END") break;
+			if (codes.rbegin()->opcode == "END") 
+				break;
 		}
+
 
 
 	}
 	else cout << "file does not exist" << endl;
 
+	printf("H%-6s%06x%06x\n", InstructionStruct::sourceName.c_str(), InstructionStruct::startAddress , InstructionStruct::currentAddress - InstructionStruct::startAddress );
 	return 0;
-
 }
 
 string* parseCode(string line)

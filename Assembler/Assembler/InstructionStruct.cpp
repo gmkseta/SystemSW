@@ -13,7 +13,7 @@ map<string, int> InstructionStruct::symbolTable = {};
 
 void InstructionStruct::calAddress()
 {
-	// 10주차 :주석일떄 주소 처리를 하지않음  
+	//주석일떄 주소 처리를 하지않음  
 	if (this->label[0] == '.') return;
 	if (this->opcode == "START")
 	{
@@ -39,7 +39,7 @@ void InstructionStruct::calAddress()
 			this->address = this->currentAddress;
 			this->currentAddress += 0x3 * stoi(this->operand);//3byte * 
 		}
-		else if (this->opcode == "word")
+		else if (this->opcode == "WORD")
 		{
 			this->address = this->currentAddress;
 			this->currentAddress += 0x3;//워드는 3
@@ -62,7 +62,7 @@ void InstructionStruct::initSizeInst()
 	InstructionStruct::sizeInst.push_back("BYTE");
 }
 
-// 10주차 : Optab 초기화 해주는 함수
+
 void InstructionStruct::initOptable()
 {
 	InstructionStruct::sic_optable.push_back({ "ADD"	,3		,0X18 });
@@ -119,7 +119,7 @@ ostream& operator<<(ostream &strm, const InstructionStruct &a) {
 		<< a.operand << endl << "address=" << hex << a.address << endl << "HexOpcode=" << a.hex_opcode << endl;
 }
 
-//11주 실습
+
 void InstructionStruct::makeSymbolTable()
 {
 	if (this->label.compare("") != 0)
@@ -140,7 +140,7 @@ int InstructionStruct::convertHexOperand()
 void InstructionStruct::printHexOperand()
 {
 	if (convertHexOperand() != -1)
-		cout << hex << "hex_opcode:" << this->hex_opcode << "     hex_operand:" << hex << convertHexOperand() << endl;
+		cout << "hex_opcode:" <<hex<< this->hex_opcode << "     hex_operand:" << hex << convertHexOperand() << endl;
 	else
 		cout << "label address : " << hex << this->address << endl;
 }

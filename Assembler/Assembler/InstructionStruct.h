@@ -9,8 +9,9 @@ public:
 	std::string label, opcode, operand;
 	int instruction_format, address;
 	static int startAddress, currentAddress;
-	static std::string sourceName;//파일이름
+	static std::string sourceName;//
 	unsigned short int hex_opcode;//16진수의 op코드 저장할 곳
+
 
 
 	typedef struct OperationCodeTable
@@ -40,7 +41,10 @@ public:
 	void convertOpcode();//문자열에 따라 16진수 명령어 코드로 변환하여 저장
 	void convertHexToStr();//16진수를 Str으로
 	void convertCharToHex();//Str을 16진수로
+
+
 	static std::map<std::string, int> symbolTable;
+	//여기에 심볼테이블이 들어감~
 
 	void printHexOperand();
 	~InstructionStruct();
